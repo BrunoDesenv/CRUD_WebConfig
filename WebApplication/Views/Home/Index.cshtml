@@ -18,7 +18,7 @@
     <tbody>
         @foreach (var config in ViewBag.Configuracao)
         {
-            <tr class="trClick" data-config="@config">
+            <tr class="trClick" data-config=config>
                 <td>@config.Chave</td>
                 <td>@config.Valor</td>
                 <td>
@@ -31,14 +31,15 @@
     </tbody>
 </table>
 
-<div class="modal" id="abrir"></div>
+<div class="modal" id="abrir">
+</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
         $(".trClick").click(function () {
             debugger;
-            var DadosConfiguracao = $(this).attr("data-config");
-            $("#abrir").load("/Home/_Editar/" + DadosConfiguracao);
+            var DadosConfiguracao = $(this).attr('data-config');
+            $("#abrir").load("/Home/Editar/" + DadosConfiguracao);
             $("#abrir").modal();
         })
     })

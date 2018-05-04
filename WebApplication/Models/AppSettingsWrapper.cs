@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Dynamic;
 
@@ -6,17 +7,20 @@ namespace WebApplication.Models
 {
     public class AppSettingsWrapper : DynamicObject
     {
-        public NameValueCollection _items;
+        public NameValueCollection items;
+        public string []itemAntigo;
 
         public AppSettingsWrapper()
         {
-            _items = ConfigurationManager.AppSettings;
+            items = ConfigurationManager.AppSettings;
         }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        public AppSettingsWrapper(string arquivo)
         {
-            result = _items[binder.Name];
-            return result != null;
+            Configuration objConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/" + arquivo);
+            AppSettingsSection appsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
+
+            itemAntigo = appsettings.Settings.AllKeys;
         }
     }
 }

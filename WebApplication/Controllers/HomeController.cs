@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 using System.Web.Mvc;
 using WebApplication.Models;
 
@@ -14,19 +10,7 @@ namespace WebApplication.Controllers
         public ActionResult Index()
         {
             //https://pt.stackoverflow.com/questions/235672/passar-um-objeto-para-modal
-            var webConfigCompleto = new List<Configuracao>();
-            dynamic appSettings = new AppSettingsWrapper();
-
-            foreach (var item in appSettings._items)
-            {
-                webConfigCompleto.Add(new Configuracao
-                {
-                    Chave = item,
-                    Valor = appSettings._items[item]
-                });
-            }
-
-            ViewBag.Configuracao = webConfigCompleto;
+            ViewBag.Configuracao = new Configuracao().LeArquivo();
 
             return View();
         }
@@ -34,7 +18,7 @@ namespace WebApplication.Controllers
         [HttpPost]
         public JsonResult Index(string teste)
         {
-            Configuration objConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+            Configuration objConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/WebNovo.config");
             AppSettingsSection objAppsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
             //Edit
             if (objAppsettings != null)
@@ -46,9 +30,17 @@ namespace WebApplication.Controllers
             return Json(JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult _Editar(Configuracao configuracao)
+        public ActionResult Editar(Configuracao configuracao)
         {
             return PartialView(configuracao);
         }
+
+        public JsonResult DePara()
+        {
+     
+    
+            return Json(JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
