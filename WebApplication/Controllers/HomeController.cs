@@ -13,6 +13,7 @@ namespace WebApplication.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            //https://pt.stackoverflow.com/questions/235672/passar-um-objeto-para-modal
             var webConfigCompleto = new List<Configuracao>();
             dynamic appSettings = new AppSettingsWrapper();
 
@@ -43,6 +44,11 @@ namespace WebApplication.Controllers
             }
 
             return Json(JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult _Editar(Configuracao configuracao)
+        {
+            return PartialView(configuracao);
         }
     }
 }
