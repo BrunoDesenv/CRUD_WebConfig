@@ -12,25 +12,11 @@ namespace WebApplication.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            ViewBag.Configuracao = new Configuracao().LeArquivo();
+            var configuracao = new Configuracao().LeArquivo();
 
-            return View();
+            return View(configuracao);
         }
 
-        [HttpPost]
-        public JsonResult Index(string teste)
-        {
-            Configuration objConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/WebNovo.config");
-            AppSettingsSection objAppsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
-            //Edit
-            if (objAppsettings != null)
-            {
-                objAppsettings.Settings["Endereco_Assets"].Value = teste;
-                objConfig.Save();
-            }
-
-            return Json(JsonRequestBehavior.AllowGet);
-        }
 
         public ActionResult Editar(Configuracao configuracao)
         {
@@ -45,9 +31,8 @@ namespace WebApplication.Controllers
             Configuration objConfig = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             AppSettingsSection objAppsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
             var chavesWebAntigo = objAppsettings.Settings.AllKeys;
-
-
-        
+            
+            
             var webConfigAntigo = new Configuracao().LeArquivo();
             var chaves = new List<string>();
 
