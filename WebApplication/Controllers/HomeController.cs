@@ -1,4 +1,7 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using WebApplication.Models;
 
@@ -9,7 +12,6 @@ namespace WebApplication.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            //https://pt.stackoverflow.com/questions/235672/passar-um-objeto-para-modal
             ViewBag.Configuracao = new Configuracao().LeArquivo();
 
             return View();
@@ -37,9 +39,29 @@ namespace WebApplication.Controllers
 
         public JsonResult DePara()
         {
-     
-    
-            return Json(JsonRequestBehavior.AllowGet);
+
+            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = @"C:\Users\bruno.santos.eit\Desktop\Projeto\WebApplication\WebApplication\Novo\Web.config";
+            Configuration objConfig = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            AppSettingsSection objAppsettings = (AppSettingsSection)objConfig.GetSection("appSettings");
+            var chavesWebAntigo = objAppsettings.Settings.AllKeys;
+
+
+        
+            var webConfigAntigo = new Configuracao().LeArquivo();
+            var chaves = new List<string>();
+
+
+            for (int i = 0; i < chavesWebAntigo.Length; i++)
+            {
+                if (webConfigAntigo[i].Chave != chavesWebAntigo[i].ToString())
+                {
+                    chaves.Add(objAppsettings.Settings.AllKeys[i].ToString());
+                }
+            }
+
+
+            return Json(new { Chaves = chaves } , JsonRequestBehavior.AllowGet);
         }
 
     }

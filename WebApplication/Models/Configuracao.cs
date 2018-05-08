@@ -17,7 +17,7 @@ namespace WebApplication.Models
                 webConfigCompleto.Add(new Configuracao
                 {
                     Chave = item,
-                    Valor = appSettings._items[item]
+                    Valor = appSettings.items[item]
                 });
             }
 
